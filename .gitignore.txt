@@ -1,0 +1,33 @@
+# =========================
+# Python cache files
+# =========================
+Code/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# =========================
+# Virtual environments
+# =========================
+venv/
+env/
+.venv/
+rmr-solver-py/
+
+# =========================
+# Environment variables
+# =========================
+.env
+
+# =========================
+# IDE settings (PyCharm)
+# =========================
+.idea/
+*.iml
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+Code/opensim.log
