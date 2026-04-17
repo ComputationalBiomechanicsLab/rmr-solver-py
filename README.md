@@ -1,6 +1,20 @@
 # rmr-solver-py
 
-RMR solver stands for Rapid Muscle Redundancy solver. It is an algorithm which solves the muscle redundancy problem, by selecting the muscles which are recruited by the human body to generate a given motion (leveraging a musculoskeletal model). The solver is presented in detail in this paper:
+**rmr-solver-py** is a Python implementation of the **Rapid Muscle Redundancy (RMR) solver** — an algorithm that solves the muscle redundancy problem by determining which muscles the human body recruits to produce a given motion, using a musculoskeletal model.
+
+This repository extends the original MATLAB RMR solver with two approaches:
+- **EMG-informed** muscle activation estimation
+- **Co-contraction Index (CCI)-informed** muscle activation estimation
+
+Both approaches account for changes in muscle coordination strategy, enabling more physiologically realistic simulations.
+
+> The original MATLAB implementation is available at: [ComputationalBiomechanicsLab/rmr-solver](https://github.com/ComputationalBiomechanicsLab/rmr-solver)
+
+---
+
+## Publications
+
+If you use this solver, please cite the original RMR paper:
 
 ```bibtex
 @article{belli2023does,
@@ -14,18 +28,12 @@ RMR solver stands for Rapid Muscle Redundancy solver. It is an algorithm which s
   publisher={Public Library of Science San Francisco, CA USA}
 }
 ```
-This repository includes the rmr-solver in python. The orginal matlab version can be find in this repsository: https://github.com/ComputationalBiomechanicsLab/rmr-solver.git
 
-In this work, the original rmr-sovler got extended by the EMG-informed and co-contraction index (CCI)-informed approach. 
-Both approaches aim to take into account changes in muscle coordination strategy when estimating muscle activations. 
-Further details can be found in our paper:
+For the EMG-informed and CCI-informed extensions, please also cite:
 
 ```bibtex
 @article{hoermann2026,
-  title={Co-contraction index informed simulations capture
-muscle coordination strategies driven changes in
-compressive knee joint contact forces in
-musculoskeletal modeling},
+  title={Co-contraction index informed simulations capture muscle coordination strategies driven changes in compressive knee joint contact forces in musculoskeletal modeling},
   author={Hörmann, Sabrina and Tumer, Nazli and Zadpoor, Amir A. and Seth, Ajay},
   journal={X},
   volume={X},
@@ -35,18 +43,26 @@ musculoskeletal modeling},
   publisher={X}
 }
 ```
-# Data
-In this paper, we are using the publicly available Comprehensive Assessment of the Musculoskeletal System
-(CAMS) knee dataset.
-You can access the data through this website: https://orthoload.com/cams-knee-project-online/
 
-# Installation
+---
+
+## Data
+
+This work uses the publicly available **Comprehensive Assessment of the Musculoskeletal System (CAMS) Knee Dataset**.
+
+Access the dataset at: [orthoload.com/cams-knee-project-online](https://orthoload.com/cams-knee-project-online/)
+
+---
+
+## Installation
 
 ```bash
 pip install -r requirements.txt
 ```
 
-# Structure
+---
+
+## Repository Structure
 
 ```
 .
@@ -65,6 +81,9 @@ pip install -r requirements.txt
 │   ├── knee_model/
 │   │   ├── geometry/
 │   │   ├── K8L_RMR_scaled.osim
+│   │   ├── emg.csv
+│   │   ├── grf.mot
+│   │   └── motion.mot
 │   │
 │   └── shoulder_model/
 │       ├── Geometry/
@@ -80,37 +99,46 @@ pip install -r requirements.txt
 ```
 
 ---
-# Getting started 
 
-### Core Scripts
-- `runKneeModel.py`  
-  Executes the full pipeline for the knee model simulation.
+## Getting Started
 
-- `runShoulderModel.py`  
-  Runs the shoulder musculoskeletal model pipeline.
-  
-## Input Data
+### Entry Point Scripts
 
-### Knee Model (`Input/knee_model/`)
-- OpenSim model: `K8L_RMR_scaled.osim`
-- Geometry assets in `geometry/`
+| Script | Description |
+|--------|-------------|
+| `runKneeModel.py` | Executes the full pipeline for the knee model simulation |
+| `runShoulderModel.py` | Executes the full pipeline for the shoulder model simulation |
 
-Please download the following data from the CAMS dataset website
-- Motion data: `motion.mot`
-- Ground reaction forces: `grf.mot`
-- EMG data: `emg.csv`
+### Input Data
 
-### Shoulder Model (`Input/shoulder_model/`)
-- OpenSim model: `TSM_Ajay2019_noWeight.osim`
-- Kinematic trials: `abd01_IK.mot`, `flx01_IK.mot`
-- Geometry assets in `Geometry/`
-  
-# Contributors
-Sabrina Hörmann, Florian van Melis
+#### Knee Model (`Input/knee_model/`)
+- **OpenSim model:** `K8L_RMR_scaled.osim`
+- **Geometry:** `geometry/`
+- **From CAMS dataset** *(download separately)*:
+  - Motion data: `motion.mot`
+  - Ground reaction forces: `grf.mot`
+  - EMG data: `emg.csv`
 
-# Acknowlegement
-This work is part of the project LoaD (projectnr. NWA1389.20.009) of the NWA-ORC research programme which is
-(partly) financed by the Dutch Research Council (NWO).
+#### Shoulder Model (`Input/shoulder_model/`)
+- **OpenSim model:** `TSM_Ajay2019_noWeight.osim`
+- **Kinematic trials:** `abd01_IK.mot`, `flx01_IK.mot`
+- **Geometry:** `Geometry/`
 
-# License
-Our code is licensed under the Apache 2.0 license (see the LICENSE_code file). 
+---
+
+## Contributors
+
+- Sabrina Hörmann
+- Florian van Melis
+
+---
+
+## Acknowledgements
+
+This work is part of the **LoaD project** (project no. NWA1389.20.009) within the NWA-ORC research programme, (partly) financed by the **Dutch Research Council (NWO)**.
+
+---
+
+## License
+
+This code is licensed under the **Apache 2.0 License** — see the [`LICENSE`](LICENSE) file for details.
