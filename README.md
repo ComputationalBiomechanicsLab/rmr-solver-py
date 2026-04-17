@@ -7,42 +7,13 @@ This repository extends the original MATLAB RMR solver with two approaches:
 - **Co-contraction Index (CCI)-informed** muscle activation estimation
 
 Both approaches account for changes in muscle coordination strategy, enabling more physiologically realistic simulations.
+Further details are described in this paper:
 
-> The original MATLAB implementation is available at: [ComputationalBiomechanicsLab/rmr-solver](https://github.com/ComputationalBiomechanicsLab/rmr-solver)
+>**Paper**: S. Hörmann, N. Tumer, A. A. Zadpoor, and A. Seth, "Co-Contraction Index Informed Simulations Capture Muscle Coordination Strategies Driven Changes in Compressive Knee Joint Contact Forces in Musculoskeletal Modeling," X, 2026.
 
----
+The original MATLAB implementation is available at: [ComputationalBiomechanicsLab/rmr-solver](https://github.com/ComputationalBiomechanicsLab/rmr-solver)
 
-## Publications
 
-If you use this solver, please cite the original RMR paper:
-
-```bibtex
-@article{belli2023does,
-  title={Does enforcing glenohumeral joint stability matter? A new rapid muscle redundancy solver highlights the importance of non-superficial shoulder muscles},
-  author={Belli, Italo and Joshi, Sagar and Prendergast, J Micah and Beck, Irene and Della Santina, Cosimo and Peternel, Luka and Seth, Ajay},
-  journal={Plos one},
-  volume={18},
-  number={11},
-  pages={e0295003},
-  year={2023},
-  publisher={Public Library of Science San Francisco, CA USA}
-}
-```
-
-For the EMG-informed and CCI-informed extensions, please also cite:
-
-```bibtex
-@article{hoermann2026,
-  title={Co-contraction index informed simulations capture muscle coordination strategies driven changes in compressive knee joint contact forces in musculoskeletal modeling},
-  author={Hörmann, Sabrina and Tumer, Nazli and Zadpoor, Amir A. and Seth, Ajay},
-  journal={X},
-  volume={X},
-  number={X},
-  pages={X},
-  year={X},
-  publisher={X}
-}
-```
 
 ---
 
@@ -132,6 +103,17 @@ pip install -r requirements.txt
 - Florian van Melis
 
 ---
+
+## Publications
+
+If you use this solver, please cite the original RMR paper:
+
+> **Paper:** I. Belli, S. Joshi, J. M. Prendergast, I. Beck, C. Della Santina, L. Peternel, and A. Seth, "Does Enforcing Glenohumeral Joint Stability Matter? A New Rapid Muscle Redundancy Solver Highlights the Importance of Non-Superficial Shoulder Muscles," *PLOS ONE*, vol. 18, no. 11, p. e0295003, 2023.
+
+For the EMG-informed and CCI-informed extensions, please also cite:
+
+>**Paper**: S. Hörmann, N. Tumer, A. A. Zadpoor, and A. Seth, "Co-Contraction Index Informed Simulations Capture Muscle Coordination Strategies Driven Changes in Compressive Knee Joint Contact Forces in Musculoskeletal Modeling," X, 2026.
+
 
 ## Acknowledgements
 
