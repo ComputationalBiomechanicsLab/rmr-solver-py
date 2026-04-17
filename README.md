@@ -34,13 +34,83 @@ musculoskeletal modeling},
   year={X},
   publisher={X}
 }
-
+```
 # Data
+In this paper, we are using the publicly available Comprehensive Assessment of the Musculoskeletal System
+(CAMS) knee dataset.
+You can access the data through this website: https://orthoload.com/cams-knee-project-online/
 
-# Requirements
+# Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+# Structure
+
+```
+.
+├── Code/
+│   ├── MotionAnalysis.py
+│   ├── PlayBackActive.py
+│   ├── PlayBackEMG.py
+│   ├── RMRsolver.py
+│   ├── runKneeModel.py
+│   ├── runShoulderModel.py
+│   ├── utilsLoadFile.py
+│   ├── utilsObjectives.py
+│   └── utilsRMRsolver.py
+│
+├── Input/
+│   ├── knee_model/
+│   │   ├── geometry/
+│   │   ├── K8L_RMR_scaled.osim
+│   │
+│   └── shoulder_model/
+│       ├── Geometry/
+│       ├── TSM_Ajay2019_noWeight.osim
+│       ├── abd01_IK.mot
+│       ├── flx01_IK.mot
+│       └── opensim.log
+│
+├── .gitignore.txt
+├── LICENSE
+├── README.md
+└── requirements.txt
+```
+
+---
+# Getting started 
+
+### Core Scripts
+- `runKneeModel.py`  
+  Executes the full pipeline for the knee model simulation.
+
+- `runShoulderModel.py`  
+  Runs the shoulder musculoskeletal model pipeline.
+  
+## Input Data
+
+### Knee Model (`Input/knee_model/`)
+- OpenSim model: `K8L_RMR_scaled.osim`
+- Geometry assets in `geometry/`
+
+Please download the following data from the CAMS dataset website
+- Motion data: `motion.mot`
+- Ground reaction forces: `grf.mot`
+- EMG data: `emg.csv`
+
+### Shoulder Model (`Input/shoulder_model/`)
+- OpenSim model: `TSM_Ajay2019_noWeight.osim`
+- Kinematic trials: `abd01_IK.mot`, `flx01_IK.mot`
+- Geometry assets in `Geometry/`
+  
+# Contributors
+Sabrina Hörmann, Florian van Melis
 
 # Acknowlegement
 This work is part of the project LoaD (projectnr. NWA1389.20.009) of the NWA-ORC research programme which is
 (partly) financed by the Dutch Research Council (NWO).
 
 # License
+Our code is licensed under the Apache 2.0 license (see the LICENSE_code file). 
