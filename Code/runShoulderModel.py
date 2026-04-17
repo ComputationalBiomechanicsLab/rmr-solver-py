@@ -39,7 +39,7 @@ motion.setTime(0.637, 7.187,hz=10) # recommended time ranges in this example: fl
 # NOTE: Set RMR_solver solver options:
 weights = np.concatenate( (np.ones(33), np.zeros(8), 10*np.ones(9)) )
 objective = utilsObj.ActSquared(weights)
-solver = RMRsolver(model,solveInfo=True,constrainActDyn=True,constrainGHjoint=True,outputJoint=['GlenoHumeral','scapulothoracic'],visualize=False)
+solver = RMRsolver(model,solveInfo=True,constrainActDyn=True,constrainGHjoint=False,outputJoint=['GlenoHumeral','scapulothoracic'],visualize=False)
 solver.setObjective(objective)
 
 solver.info()
