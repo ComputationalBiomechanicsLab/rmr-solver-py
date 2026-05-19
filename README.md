@@ -98,10 +98,11 @@ pip install -r requirements.txt
 ### Output Data
 
 The output of the RMR solver includes:
-- joint_forces.csv: The resulting joint reaction forces in N and moment in N/m2 of the defined output joint. The results are reported in the child (_child) and ground (_ground) reference frames. Furthermore the csv fiels includes a column on the time steps. 
-- muscle_activations.csv: The csv files includes the calculcated muscle activations for each muscle in the model.
-- reserve_forces.csv: Here we report the resulting reserve forces of the reserve actuators.
-- 
+- joint_forces.csv: The resulting joint reaction forces in N and moment in N/m2 of the defined output joint. The results are reported in the child (_child) and ground (_ground) reference frames. Furthermore, the csv fiels includes a column of the time steps. 
+- muscle_activation.csv: The csv files includes the calculcated muscle activations for each muscle in the model. Furthermore, the csv fiels includes a column of the time steps.
+- reserve_forces.csv: Here we report the resulting reserve forces of each reserve actuators in the model. Furthermore, the csv fiels includes a column of the time steps.
+
+All outputs are reported using SI units. 
 ---
 
 ## Contributors
