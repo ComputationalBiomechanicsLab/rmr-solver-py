@@ -422,6 +422,7 @@ class MotionAnalysis:
         df_activation = pd.DataFrame()
         df_activation_muscle = pd.DataFrame()
         indices = np.arange(self.muscleNum)
+        df_activation_muscle['time'] = time[0]
         for resIndex, res in enumerate(results):
             for plotIndex, muscleIndex in enumerate(indices):
                 df_activation_muscle[f'{self.actuatorNames[muscleIndex]}'] = activation[resIndex][:, muscleIndex]
@@ -431,6 +432,7 @@ class MotionAnalysis:
         N = self.actuatorNum - self.muscleNum
 
         df_reserve = pd.DataFrame()
+        df_reserve['time'] = time[0]
         # fill grid of plots with results
         for resIndex, res in enumerate(results):
             for i in range(N):
