@@ -416,7 +416,7 @@ class RMRsolver:
             jointForcesGround = np.zeros([self.jointNum, 6])
             for i, joint in enumerate(self.joints):
                 child_body_name = joint.getChildFrame().findBaseFrame().getName()
-                child_body_frame = self.model.getComponent(f"bodyset/{child_body_name}") # in our study Hörmann et al. 2027 we accounted for the tibial slope and reported the output in 'bodyset/{child_body_name}/{child_body_name}_offsetframe'
+                child_body_frame = self.model.getComponent(f"bodyset/{child_body_name}") # in our study Hörmann et al. 2026 we accounted for the tibial slope and reported the output in 'bodyset/{child_body_name}/{child_body_name}_offsetframe'
 
                 jointForcesChild[i, :3] = self.model.getGround().expressVectorInAnotherFrame(self.state,
                                                                                          joint.calcReactionOnChildExpressedInGround(
@@ -457,7 +457,7 @@ class RMRsolver:
         # Convert reserve actuator 'activation' to forces
         activation[self.muscleNum:] = activation[self.muscleNum:] * self.actuatorReserveOptimalForce
         
-        return activation, jointForcesChild, jointForcesGround,  info
+        return activation, jointForcesChild, jointForcesGround, muscleForcePassiveMax, info
 
     # self.model.realizeDynamics(self.state)
     # self.model.getMatterSubsystem()

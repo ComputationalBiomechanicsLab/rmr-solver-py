@@ -31,7 +31,6 @@ from PlayBackActive import PlayBackActive
 from MotionAnalysis import MotionAnalysis
 from PlayBackEMG import PlayBackEMG
 import utilsObjectives as utilsObj
-from utilsRunRMR import *
 
 warnings.filterwarnings('ignore', category=RuntimeWarning)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
@@ -57,6 +56,19 @@ def run_knee_model(
         agonist:        Agonist muscle for CCI objective. Only used if CCI_informed=True.
         antagonist:     Antagonist muscle for CCI objective. Only used if CCI_informed=True.
     """
+
+    if output_joints is None:
+        output_joints = ['walker_knee_l', 'walker_knee_r'] # define for which joints the output should be saved
+
+    base = Path(__file__).resolve().parent.parent
+    path_model = base / "Input" / "knee_model" / "K8L_RMR_scaled.osim"
+    path_ef = base / "Input" / "knee_model" / "grf.mot"
+    path_mot = base / "Input" / "knee_model" / "motion.mot"
+
+    for p in [path_model, path_ef, path_mot]:
+        if not p.exists():
+            raise FileNotFoundError(f"Missing input file: {p}")
+
     if CCI_informed and EMG_informed:
         raise ValueError("CCI_informed and EMG_informed cannot both be True.")
     # Define agonist and antagonist muscle for CCI informed simulations
@@ -65,17 +77,6 @@ def run_knee_model(
         antagonist = 'vaslat_l'
     if EMG_keywords is None:
         EMG_keywords = ['recfem', 'vaslat', 'vasmed', 'bflh', 'gas', 'semiten', 'tibant'] # define all the muscles where EMG measurements are available
-    if output_joints is None:
-        output_joints = ['walker_knee_l', 'walker_knee_r'] # define for which joints the output should be saved
-
-    base = Path(__file__).resolve().parent.parent
-    path_model = base / "Input" / "knee_model" / "K8L_RMR_scaled.osim"
-    path_ef    = base / "Input" / "knee_model" / "grf.mot"
-    path_mot   = base / "Input" / "knee_model" / "motion.mot"
-
-    for p in [path_model, path_ef, path_mot]:
-        if not p.exists():
-            raise FileNotFoundError(f"Missing input file: {p}")
 
     # Load model
     model = opensim.Model(str(path_model))
@@ -146,8 +147,8 @@ def run_knee_model(
 
     result = analysis.runAll()
     analysis.addPlot('info')
-    # analysis.addPlot('reserve')
-    # analysis.addPlot('coordinate')
+    analysis.addPlot('reserve')
+   # analysis.addPlot('coordinate')
     analysis.addPlot('joint')
     analysis.plotAll([result])
     # save results to a .csv file
@@ -155,6 +156,7 @@ def run_knee_model(
         base / "Output" / "knee_model" / "joint_forces.csv",
         base / "Output" / "knee_model" / "muscle_activation.csv",
         base / "Output" / "knee_model" / "reserve_forces.csv",
+        base / "Output" / "knee_model" / "muscle_passive_forces.csv",
         [result], labels=['Estimation']
     )
     logger.info("Done. Results saved to %s", base / "Output")

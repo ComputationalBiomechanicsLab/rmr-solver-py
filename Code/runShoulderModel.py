@@ -19,7 +19,7 @@ from MotionAnalysis import MotionAnalysis
 from PlayBackEMG import PlayBackEMG
 import utilsObjectives as utilsObj
 import opensim
-from utilsRunRMR import *
+
 warnings.filterwarnings('ignore', category=RuntimeWarning)
 
 # NOTE: Select path to OpenSim model (.osim):

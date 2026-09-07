@@ -120,6 +120,7 @@ class MotionAnalysis:
         activation = np.zeros([self.steps, self.actuatorNum])
         jointForcesChild = np.zeros([self.steps, self.jointNum, 6])
         jointForcesGround = np.zeros([self.steps, self.jointNum, 6])
+        passiveMuscleForces = np.zeros([self.steps, self.muscleNum])
 
         solverInfo = dict(success=[],
                           message=[],
@@ -140,15 +141,15 @@ class MotionAnalysis:
 
             if self.hasEMG:
                 if not self.jointNum == 0:
-                    activation[i,:], jointForcesChild[i,:], jointForcesGround[i,:], info = self.solver.solve(time[i],position[i,:],speed[i,:],acceleration[i,:],self.EMG[i,:])
+                    activation[i,:], jointForcesChild[i,:], jointForcesGround[i,:], passiveMuscleForces[i,:], info = self.solver.solve(time[i],position[i,:],speed[i,:],acceleration[i,:],self.EMG[i,:])
                 else:
-                    activation[i,:], jointForcesChild[:], jointForcesGround[i,:], info = self.solver.solve(time[i],position[i,:],speed[i,:],acceleration[i,:],self.EMG[i,:])
+                    activation[i,:], jointForcesChild[:], jointForcesGround[i,:], passiveMuscleForces[i,:], info = self.solver.solve(time[i],position[i,:],speed[i,:],acceleration[i,:],self.EMG[i,:])
 
             else:
                 if not self.jointNum == 0:
-                    activation[i,:], jointForcesChild[i,:], jointForcesGround[i,:], info = self.solver.solve(time[i],position[i,:],speed[i,:],acceleration[i,:])
+                    activation[i,:], jointForcesChild[i,:], jointForcesGround[i,:], passiveMuscleForces[i,:], info = self.solver.solve(time[i],position[i,:],speed[i,:],acceleration[i,:])
                 else:
-                    activation[i,:], jointForcesChild[i,:], jointForcesGround[i,:], info = self.solver.solve(time[i],position[i,:],speed[i,:],acceleration[i,:])
+                    activation[i,:], jointForcesChild[i,:], jointForcesGround[i,:], passiveMuscleForces[i,:], info = self.solver.solve(time[i],position[i,:],speed[i,:],acceleration[i,:])
 
             for key in list(solverInfo.keys()):
                 solverInfo[key].append(info[key])
@@ -164,6 +165,7 @@ class MotionAnalysis:
                        activation= activation,
                        jointForcesChild=jointForcesChild,
                        jointForcesGround=jointForcesGround,
+                       passiveMuscleForces=passiveMuscleForces,
                        info = solverInfo)
 
         return results
@@ -184,7 +186,7 @@ class MotionAnalysis:
                 labels.append('Result ' + str(i))
 
         # unpack results and list them per data type
-        time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, solverInfo = unpackResults(results)
+        time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, passiveMuscleForces, solverInfo = unpackResults(results)
         
         # plot requested plots
         for figIndex, kwargs in enumerate(self.plotKwargs):
@@ -404,9 +406,9 @@ class MotionAnalysis:
                 fig.legend(loc='outside right upper',fontsize='x-small')
         plt.show()
 
-    def saveToCSV(self, outputForce, outputMuscleActivations, outputReserveForce, results: List[Dict], labels: List = []) -> None:
+    def saveToCSV(self, outputForce, outputMuscleActivations, outputReserveForce, outputPassiveMuscleForces, results: List[Dict], labels: List = []) -> None:
         # unpack results and list them per data type
-        time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, solverInfo = unpackResults(results)
+        time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, passiveMuscleForces, solverInfo = unpackResults(results)
         directionLabel = ['Mx', 'My', 'Mz', 'Fx', 'Fy', 'Fz']
         indices = [0]
         df = pd.DataFrame()
@@ -439,6 +441,15 @@ class MotionAnalysis:
                 df_reserve[f'{self.actuatorNames[i + self.muscleNum]}']  = activation[resIndex][:, i + self.muscleNum]
         df_reserve.to_csv(path_or_buf=outputReserveForce, index=False)
 
+        df_passive_muscle = pd.DataFrame()
+        df_passive_muscle_single = pd.DataFrame()
+        for resIndex, res in enumerate(results):
+            for plotIndex, muscleIndex in enumerate(indices):
+                df_passive_muscle_single[f'{self.actuatorNames[muscleIndex]}'] = passiveMuscleForces[resIndex][:,
+                                                                                 muscleIndex]
+            df_passive_muscle = pd.concat([df_passive_muscle, df_passive_muscle_single])
+        df_passive_muscle.to_csv(path_or_buf=outputPassiveMuscleForces, index=False)
+
 
 
     def compareAll(self, results: List[Dict], labels: List=[]) -> None:
@@ -461,7 +472,7 @@ class MotionAnalysis:
                 labels.append('Result ' + str(i))
         
         # unpack results and list them per data type
-        time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, solverInfo = unpackResults(results)
+        time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, passiveMuscleForces, solverInfo = unpackResults(results)
         
         print('>>>INFO: SOLVER COMPARISON REPORT\n')
 
@@ -561,7 +572,7 @@ class MotionAnalysis:
             raise AssertionError("Please provide EMG data for comparison.")
         
         # unpack results and list them per data type
-        time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, solverInfo = unpackResults(results)
+        time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, passiveMuscleForces, solverInfo = unpackResults(results)
         
         # create labels if empty
         if len(labels) == 0:
@@ -640,6 +651,7 @@ def unpackResults(results: List[Dict]) -> Tuple[List,List,List,List,List,List,Li
     activation = []
     jointForcesChild = []
     jointForcesGround = []
+    passiveMuscleForces = []
     solverInfo = []
 
     for i, res in enumerate(results):
@@ -650,6 +662,7 @@ def unpackResults(results: List[Dict]) -> Tuple[List,List,List,List,List,List,Li
         activation.append(res['activation'])
         jointForcesChild.append(res['jointForcesChild'])
         jointForcesGround.append(res['jointForcesGround'])
+        passiveMuscleForces.append(res['passiveMuscleForces'])
         solverInfo.append(res['info'])
 
-    return time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, solverInfo
+    return time, position, speed, acceleration, activation, jointForcesChild, jointForcesGround, passiveMuscleForces, solverInfo
