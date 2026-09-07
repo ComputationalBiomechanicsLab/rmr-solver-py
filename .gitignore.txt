@@ -6,7 +6,7 @@ Code/__pycache__/
 *.pyo
 *.pyd
 
-rmr-solver-py
+rmr-solver-py/
 # =========================
 # Virtual environments
 # =========================
